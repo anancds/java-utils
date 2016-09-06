@@ -136,7 +136,8 @@ public class LruCache<K, V> {
                 }
 
                 //todo 这里有错误！！
-                Map.Entry<K, V> toEvict = map.eldest();
+//                Map.Entry<K, V> toEvict = map.eldest();
+                Map.Entry<K, V> toEvict = null;
                 if (toEvict == null) {
                     break;
                 }

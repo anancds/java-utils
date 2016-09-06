@@ -97,6 +97,7 @@
         <alluxio.version>1.0.1</alluxio.version>
         <netty.version>4.0.28.Final</netty.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <http.version>4.5.2</http.version>
     </properties>
 
     <dependencies>
@@ -544,6 +545,16 @@
                      <artifactId>alluxio-core-client-internal</artifactId>
                  </exclusion>
              </exclusions> -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${http.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.5</version>
         </dependency>
     </dependencies>
 
