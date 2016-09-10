@@ -4,7 +4,6 @@ import java.io.File;
 
 import static com.cds.utils.SizeOfObject.fullSizeOf;
 import static com.cds.utils.SizeOfObject.sizeOf;
-import static org.junit.Assert.*;
 
 public class SizeOfObjectTest {
     /**
@@ -15,6 +14,7 @@ public class SizeOfObjectTest {
         int a;
     }
 
+
     /**
      * -XX:+UseCompressedOops: mark/4 + metedata/8 + 4 + 4 + padding/4 = 24
      * -XX:-UseCompressedOops: mark/8 + metedata/8 + 4 + 4 = 24
@@ -24,6 +24,7 @@ public class SizeOfObjectTest {
         int b;
     }
 
+
     /**
      * -XX:+UseCompressedOops: mark/4 + metedata/8 + 4 + 4 + padding/4 = 24
      * -XX:-UseCompressedOops: mark/8 + metedata/8 + 8 + 4 + padding/4 = 32
@@ -32,6 +33,7 @@ public class SizeOfObjectTest {
         int b2a;
         Integer b2b;
     }
+
 
     /**
      * 不考虑对象头：
@@ -48,10 +50,12 @@ public class SizeOfObjectTest {
         }
     }
 
+
     static class D extends B {
         int da;
         Integer[] di = new Integer[3];
     }
+
 
     /**
      * 会算上A的实例字段
