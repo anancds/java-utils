@@ -75,6 +75,7 @@ public class SizeOfObjectTest {
         System.out.println("sizeOf(new C())=" + sizeOf(new C()));
         System.out.println("fullSizeOf(new C())=" + fullSizeOf(new C()));
         System.out.println("sizeOf(new D())=" + sizeOf(new D()));
+        System.out.println("sizeOf(new byte[0])=" + sizeOf(new byte[0]));
         System.out.println("fullSizeOf(new D())=" + fullSizeOf(new D()));
         System.out.println("sizeOf(new int[3])=" + sizeOf(new int[3]));
         System.out.println("sizeOf(new Integer(1)=" + sizeOf(new Integer(1)));
@@ -85,5 +86,11 @@ public class SizeOfObjectTest {
         System.out.println("sizeOf(new Integer[4])=" + sizeOf(new Integer[4]));
         System.out.println("sizeOf(new A[3])=" + sizeOf(new A[3]));
         System.out.println("sizeOf(new E())=" + sizeOf(new E()));
+
+        try {
+            Thread.sleep(100000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
