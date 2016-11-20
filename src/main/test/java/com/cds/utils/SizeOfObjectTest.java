@@ -6,6 +6,11 @@ import static com.cds.utils.SizeOfObject.fullSizeOf;
 import static com.cds.utils.SizeOfObject.sizeOf;
 
 public class SizeOfObjectTest {
+
+    private static class Node{
+        String item;
+        Node next;
+    }
     /**
      * -XX:+UseCompressedOops: mark/4 + metedata/8 + 4 = 16
      * -XX:-UseCompressedOops: mark/8 + metedata/8 + 4 + padding/4 = 24
@@ -66,6 +71,8 @@ public class SizeOfObjectTest {
     }
 
     public static void main(String[] args) throws IllegalAccessException {
+
+        System.out.println("sizeOf Node is : " + sizeOf(new Node()));
         System.out.println(new File("./target/classes").getAbsolutePath());
         System.out.println("sizeOf(new Object())=" + sizeOf(new Object()));
         System.out.println("sizeOf(new A())=" + sizeOf(new A()));
@@ -84,11 +91,11 @@ public class SizeOfObjectTest {
         System.out.println("sizeOf(new Integer[2])=" + sizeOf(new Integer[2]));
         System.out.println("sizeOf(new Integer[3])=" + sizeOf(new Integer[3]));
         System.out.println("sizeOf(new Integer[4])=" + sizeOf(new Integer[4]));
-        System.out.println("sizeOf(new A[3])=" + sizeOf(new A[3]));
+        System.out.println("sizef(new A[3])=" + sizeOf(new A[3]));
         System.out.println("sizeOf(new E())=" + sizeOf(new E()));
 
         try {
-            Thread.sleep(100000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
