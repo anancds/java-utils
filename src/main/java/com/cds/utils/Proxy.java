@@ -4,8 +4,6 @@ package com.cds.utils;
  * Created by cds on 12/31/16 22:09.
  */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +13,7 @@ import java.util.TreeMap;
 public class Proxy {
 
     /** 日志记录器 */
-    private static final Logger LOG = LoggerFactory.getLogger(Proxy.class);
+//    private static final Logger LOG = LoggerFactory.getLogger(Proxy.class);
 
     /**
      * 存放每个被调用程序的一个可读的描述信息
@@ -36,11 +34,11 @@ public class Proxy {
      * @param programs 类名map
      */
     private static void printUsage(Map<String, ProgramDescription> programs) {
-        LOG.warn("Valid program names are:\r\n");
-        for (Map.Entry<String, ProgramDescription> item : programs.entrySet()) {
-            LOG.info(" " + item.getKey() + ": "
-                    + item.getValue().getDescription() + "\r\n");
-        }
+//        LOG.warn("Valid program names are:\r\n");
+//        for (Map.Entry<String, ProgramDescription> item : programs.entrySet()) {
+//            LOG.info(" " + item.getKey() + ": "
+//                    + item.getValue().getDescription() + "\r\n");
+//        }
     }
 
     /**
@@ -67,7 +65,7 @@ public class Proxy {
 
         /* 确保指定了一个类名 */
         if (0 == args.length) {
-            LOG.warn("You must give one argument.");
+//            LOG.warn("You must give one argument.");
             printUsage(programs);
             return -1;
         }
@@ -75,7 +73,7 @@ public class Proxy {
         /* 判断给定的类名是否有效 */
         ProgramDescription pgm = programs.get(args[0]);
         if (null == pgm) {
-            LOG.warn("Unknown program '" + args[0] + "' chosen.");
+//            LOG.warn("Unknown program '" + args[0] + "' chosen.");
             printUsage(programs);
             return -1;
         }
