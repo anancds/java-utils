@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class JobTriggerDescriptor {
 
-    private String type = JobTriggerRule.CRON_TRIGGER.getType();  // 触发器类型
+    private String type = JobTriggerRule.CRON_TRIGGER.getType(); // 触发器类型
     private Map<String, String> arguments = new HashMap<>(); // 触发器参数
 
     public JobTriggerDescriptor() {

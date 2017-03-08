@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class JobSchedulerAgent {
 
-    protected static Logger LOG = LoggerFactory.getLogger(JobSchedulerAgent.class);
+    private static Logger LOG = LoggerFactory.getLogger(JobSchedulerAgent.class);
 
     private Scheduler scheduler;
     protected JobPlanDescriptor jobPlan;
@@ -141,7 +141,8 @@ public abstract class JobSchedulerAgent {
             triggerBuilder.endAt(end);
         }
         // 使用cron调度器，最大迭代次数这样的调度参数就失效了
-        String cronExpression = triggerDescription.getArguments().get(JobTriggerRule.CRON_TRIGGER.ARGUMENTS.EXPRESSION);
+        String cronExpression = triggerDescription.getArguments().get(
+            JobTriggerRule.CRON_TRIGGER.ARGUMENTS.EXPRESSION);
         triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(cronExpression).inTimeZone(DateUtils.TIMEZONE_ASIA_SHANGHAI));
         return triggerBuilder.build();
     }
@@ -174,7 +175,8 @@ public abstract class JobSchedulerAgent {
             triggerBuilder.endAt(end);
         }
         int maxIterations = rules.getIterations();
-        String intervalSecondsStr = triggerDescription.getArguments().get(JobTriggerRule.FIX_RATE_TRIGGER.ARGUMENTS.INTERVAL);
+        String intervalSecondsStr = triggerDescription.getArguments().get(
+            JobTriggerRule.FIX_RATE_TRIGGER.ARGUMENTS.INTERVAL);
         int intervalSeconds = !StringUtils.hasText(intervalSecondsStr) ? 0 : Integer.parseInt(intervalSecondsStr);
         if (maxIterations > 0) {
             if (intervalSeconds > 0) {
