@@ -12,4 +12,46 @@
   <artifactId>scala-utils</artifactId>
 
 
+  <!--<build>-->
+    <!--<plugins>-->
+      <!--<plugin>-->
+        <!--<groupId>net.alchim31.maven</groupId>-->
+        <!--<artifactId>scala-maven-plugin</artifactId>-->
+        <!--<version>3.1.5</version>-->
+        <!--<executions>-->
+          <!--<execution>-->
+            <!--<goals>-->
+              <!--<goal>compile</goal>-->
+              <!--<goal>testCompile</goal>-->
+            <!--</goals>-->
+          <!--</execution>-->
+        <!--</executions>-->
+        <!--<configuration>-->
+          <!--<encoding>utf-8</encoding>-->
+          <!--<sourceDir>src/main/scala</sourceDir>-->
+          <!--<scalaVersion>${scala.version}</scalaVersion>-->
+          <!--<args>-->
+            <!--<arg>-unchecked</arg>-->
+            <!--<arg>-deprecation</arg>-->
+          <!--</args>-->
+          <!--<jvmArgs>-->
+            <!--<jvmArg>-Xms64m</jvmArg>-->
+            <!--<jvmArg>-Xms1024m</jvmArg>-->
+            <!--<jvmArg>-Xmx1024m</jvmArg>-->
+            <!--<jvmArg>-XX:PermSize=${PermGen}</jvmArg>-->
+            <!--<jvmArg>-XX:MaxPermSize=${MaxPermGen}</jvmArg>-->
+          <!--</jvmArgs>-->
+        <!--</configuration>-->
+      <!--</plugin>-->
+    <!--</plugins>-->
+  <!--</build>-->
+
+  <dependencies>
+    <dependency>
+      <groupId>com.cds.utils</groupId>
+      <artifactId>java-utils</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
 </project>
