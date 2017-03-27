@@ -22,7 +22,7 @@
     <slf4j.version>1.7.7</slf4j.version>
     <junit.version>4.11</junit.version>
     <hadoop.version>2.5.2</hadoop.version>
-    <hbase.version>0.98.6-hadoop2</hbase.version>
+    <hbase.version>1.2.0</hbase.version>
     <kafka.version>0.8.2.2</kafka.version>
     <scala.version>2.11.8</scala.version>
     <scala.binary.version>2.10</scala.binary.version>
