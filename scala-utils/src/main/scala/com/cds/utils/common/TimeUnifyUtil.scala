@@ -6,10 +6,9 @@ import java.util.{Calendar, Date, TimeZone}
 import scala.collection.mutable
 
 /**
-  * Created by chendongsheng5 on 2017/3/24.
+  * Created by chendongsheng5 on 2017/3/29.
   */
 object TimeUnifyUtil {
-
   val YEAR = "Y"
   val MONTH = "M"
   val DAY = "D"
@@ -17,7 +16,7 @@ object TimeUnifyUtil {
   val MINUTE = "F"
   val SECOND = "S"
 
-  val TIMEZONE = TimeZone.getDefault.getID
+  val TIMEZONE: String = TimeZone.getDefault.getID
 
   /**
     * 获取某年第一天日期
@@ -28,7 +27,7 @@ object TimeUnifyUtil {
     */
   def getYearFirst(year: Int, timeZone: String): Date = {
     val calendar: Calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone))
-    calendar.clear
+    calendar.clear()
     calendar.set(Calendar.YEAR, year)
     calendar.getTime
   }
@@ -42,7 +41,7 @@ object TimeUnifyUtil {
     */
   def getYearLast(year: Int, timeZone: String): Date = {
     val calendar: Calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone))
-    calendar.clear
+    calendar.clear()
     calendar.set(Calendar.YEAR, year)
     calendar.roll(Calendar.DAY_OF_YEAR, -1)
     calendar.getTime
@@ -57,7 +56,7 @@ object TimeUnifyUtil {
     */
   def getTimeYearFirst(year: Int, timeZone: String): Date = {
     val calendar: Calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone))
-    calendar.clear
+    calendar.clear()
     calendar.set(Calendar.YEAR, year)
     calendar.getTime
   }
@@ -71,7 +70,7 @@ object TimeUnifyUtil {
     */
   def getTimeYearLast(year: Int, timeZone: String): Date = {
     val calendar: Calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone))
-    calendar.clear
+    calendar.clear()
     calendar.set(Calendar.YEAR, year)
     calendar.add(Calendar.YEAR, 1)
     calendar.add(Calendar.MILLISECOND, -1)
@@ -336,7 +335,7 @@ object TimeUnifyUtil {
     * @return 转化后的时间字符串
     */
   def formatLongDate(time: Long, formatStr: String, timeZone: String): String = {
-    val date = new Date((time))
+    val date = new Date(time)
     val format = new SimpleDateFormat(formatStr)
     format.setTimeZone(TimeZone.getTimeZone(timeZone))
     format.format(date)
@@ -351,7 +350,7 @@ object TimeUnifyUtil {
     * @param timeZone    时区
     * @return 格式化后的时间字符串
     */
-  def getDateWithLevel(dateStr: String, valueFormat: String, format: String, timeZone: String) = {
+  def getDateWithLevel(dateStr: String, valueFormat: String, format: String, timeZone: String): String = {
     val date = parseToDate(dateStr, format, timeZone)
     formatDate(date, valueFormat, timeZone)
   }
@@ -364,7 +363,7 @@ object TimeUnifyUtil {
     * @param timeZone    时区
     * @return 格式化后的时间字符串
     */
-  def getLongTimeWithLevel(timeLong: Long, valueFormat: String, timeZone: String) = {
+  def getLongTimeWithLevel(timeLong: Long, valueFormat: String, timeZone: String): String = {
     val date = new Date(timeLong)
     formatDate(date, valueFormat, timeZone)
   }
@@ -414,7 +413,7 @@ object TimeUnifyUtil {
     *
     * @return
     */
-  def timeStrAddSubMinSecond(timeLong: Long, value: Int, timeZone: String, format: String) = {
+  def timeStrAddSubMinSecond(timeLong: Long, value: Int, timeZone: String, format: String): String = {
     val time = new Date(timeLong)
     val calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone))
     calendar.setTime(time)
@@ -511,7 +510,7 @@ object TimeUnifyUtil {
     * @param timeZone 时区
     * @return 获取整点分钟
     */
-  def getMinutelyMinute(timeStr: String, format: String, timeZone: String) = {
+  def getMinutelyMinute(timeStr: String, format: String, timeZone: String): String = {
     val time = parseToDate(timeStr, format, timeZone)
     val calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone))
     calendar.setTime(time)
@@ -596,7 +595,7 @@ object TimeUnifyUtil {
     * @param format
     * @return
     */
-  def generateTimeFormatSeq(format: String) = {
+  def generateTimeFormatSeq(format: String): Seq[String] = {
     format match {
       case "yyyy-MM-dd" => Seq("yyyy", "yyyy-MM", "yyyy-MM-dd", "yyyy-MM-dd HH", "yyyy-MM-dd HH:mm", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss.SSS")
       case "yyyy-MM-dd HH:mm:ss.SSS" => Seq("yyyy", "yyyy-MM", "yyyy-MM-dd", "yyyy-MM-dd HH", "yyyy-MM-dd HH:mm", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss.SSS")
@@ -760,6 +759,7 @@ object TimeUnifyUtil {
   }
 
   def main(args: Array[String]) {
+
     val dateStr = "2016-12-01 10:55:59.555"
     val format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
     format.setTimeZone(TimeZone.getTimeZone("GMT"))
