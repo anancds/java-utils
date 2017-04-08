@@ -1,10 +1,12 @@
 package com.cds.utils;
 
+import com.cds.utils.annotation.SuppressForbidden;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by chendongsheng5 on 2017/4/8.
  */
+@SuppressForbidden(reason = "")
 public final class SetOnce<T> implements Cloneable {
 
   private final AtomicBoolean set;
