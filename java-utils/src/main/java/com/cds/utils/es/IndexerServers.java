@@ -9,9 +9,6 @@ import com.google.common.cache.RemovalNotification;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.client.http.JestHttpClient;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.CloudSolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.spark.SparkContext;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.get.GetIndexResponse;
@@ -23,6 +20,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.Tuple2;
@@ -43,9 +41,10 @@ import java.util.regex.Pattern;
  * Created by chendongsheng5 on 2017/3/30.
  */
 public class IndexerServers {
-  private static Logger LOG = LoggerFactory.getLogger(IndexerServers.class);
+
   public static Cache<String, Client> cachedEsClient = CacheBuilder.newBuilder().
       expireAfterAccess(1, TimeUnit.DAYS).removalListener(new EsClientRemoveListener()).build();
+  private static Logger LOG = LoggerFactory.getLogger(IndexerServers.class);
 
 //  public static SolrServer getSolrIndexerServer(String indexerUrl, SparkContext sc) throws Exception {
 //
@@ -107,7 +106,8 @@ public class IndexerServers {
     Client client = cachedEsClient.get(Arrays.toString(tuple3._1()), new Callable<Client>() {
       @Override
       public Client call() throws Exception {
-        TransportClient esClient = (TransportClient) originalESClient(tuple3._1(), esClientTimeout, esClientSniff, clusterName);
+        TransportClient esClient = (TransportClient) originalESClient(tuple3._1(), esClientTimeout,
+            esClientSniff, clusterName);
         if (esClient.connectedNodes().size() == 0) {
           esClient.close();
           throw new Exception("can not get es-connnect");
@@ -158,28 +158,21 @@ public class IndexerServers {
       if (2 != keyValuePair.length) {
         throw new IOException("ES's host is not correct:" + Arrays.toString(keyValuePair));
       }
-      addrs[i] = new InetSocketTransportAddress(InetAddress.getByName(keyValuePair[0]), Integer.valueOf(keyValuePair[1]));
+      addrs[i] = new InetSocketTransportAddress(InetAddress.getByName(keyValuePair[0]),
+          Integer.valueOf(keyValuePair[1]));
       i++;
     }
 
-    Settings settings = Settings.settingsBuilder()
+    Settings settings = Settings.builder()
         .put("cluster.name", clusterName)
         .put("client.transport.sniff", esClientSniff)
         .put("client.transport.ping_timeout", esClientTimeout + "s").build();
-    return TransportClient.builder().settings(settings).build().addTransportAddresses(addrs);
+    TransportClient client = new PreBuiltTransportClient(settings).addTransportAddresses(addrs);
+    return client;
   }
 
-  private static class EsClientRemoveListener implements RemovalListener<String, Client> {
-    @Override
-    public void onRemoval(RemovalNotification<String, Client> notification) {
-      if (null != notification && null != notification.getValue()) {
-        LOG.debug("remove es cache" + notification.getKey());
-        notification.getValue().close();
-      }
-    }
-  }
-
-  public static JestHttpClient getJestClient(String[] hostPair, int esClientTimeout, boolean esClientSniff, String clusterName) throws IOException {
+  public static JestHttpClient getJestClient(String[] hostPair, int esClientTimeout,
+      boolean esClientSniff, String clusterName) throws IOException {
     JestClientFactory factory = new JestClientFactory();
     List<String> restServerUrls = new ArrayList<>();
     String[] keyValuePair;
@@ -191,7 +184,8 @@ public class IndexerServers {
       restServerUrls.add("http://" + keyValuePair[0] + ":" + "9200");
     }
     factory.setHttpClientConfig(new HttpClientConfig.Builder(
-        restServerUrls).readTimeout(esClientTimeout * 1000).connTimeout(esClientTimeout * 1000).multiThreaded(true).discoveryEnabled(true).build());
+        restServerUrls).readTimeout(esClientTimeout * 1000).connTimeout(esClientTimeout * 1000)
+        .multiThreaded(true).discoveryEnabled(true).build());
     return (JestHttpClient) factory.getObject();
   }
 
@@ -227,14 +221,16 @@ public class IndexerServers {
       esHost = esUrl.substring(0, pos);
       indexType = esUrl.substring(pos + 1).split("/");
     } catch (Exception e) {
-      throw new IOException("EsUrl is not in conformity with 'host:port,host:port:index/type'.esURL=" + esUrl);
+      throw new IOException(
+          "EsUrl is not in conformity with 'host:port,host:port:index/type'.esURL=" + esUrl);
     }
     if (2 != indexType.length) {
       throw new IOException("ES's index/type are not correct:" + esUrl);
     }
 
-    if (!StringUtils.hasText(indexType[1]))
+    if (!StringUtils.hasText(indexType[1])) {
       throw new IOException("ES's type not be null:" + esUrl);
+    }
 
     String[] hostPair = esHost.split(",");
     if (1 > hostPair.length) {
@@ -258,8 +254,10 @@ public class IndexerServers {
     return result;
   }
 
-  public static List<String> getAllIndexWithType(Client esClient, String indexPrefix, String indexType) throws IOException {
-    GetIndexRequestBuilder indexSearch = esClient.admin().indices().prepareGetIndex().addTypes(indexType);
+  public static List<String> getAllIndexWithType(Client esClient, String indexPrefix,
+      String indexType) throws IOException {
+    GetIndexRequestBuilder indexSearch = esClient.admin().indices().prepareGetIndex()
+        .addTypes(indexType);
     GetIndexResponse searchResponse = indexSearch.execute().actionGet();
     String[] indexs = searchResponse.getIndices();
     List<String> relatedIndexs = new ArrayList<>();
@@ -271,14 +269,15 @@ public class IndexerServers {
     return relatedIndexs;
   }
 
-  public static long getTotalCountWithIndex(Client esClient, String index, String indexType, QueryBuilder queryBuilder) {
-    SearchRequestBuilder builder = esClient.prepareSearch(index).setTypes(indexType).setQuery(queryBuilder);
+  public static long getTotalCountWithIndex(Client esClient, String index, String indexType,
+      QueryBuilder queryBuilder) {
+    SearchRequestBuilder builder = esClient.prepareSearch(index).setTypes(indexType)
+        .setQuery(queryBuilder);
     SearchResponse searchResponse = builder.execute().actionGet();
     return searchResponse.getHits().getTotalHits();
   }
 
   public static void main(String[] argv) {
-
 
     try {
       Tuple3<String[], String, String> tuple = parserESUrl("host:port,host:port:/typeName");
@@ -287,6 +286,17 @@ public class IndexerServers {
       System.out.println(parserESUrl("host:port,host:port:/typeName"));
     } catch (IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  private static class EsClientRemoveListener implements RemovalListener<String, Client> {
+
+    @Override
+    public void onRemoval(RemovalNotification<String, Client> notification) {
+      if (null != notification && null != notification.getValue()) {
+        LOG.debug("remove es cache" + notification.getKey());
+        notification.getValue().close();
+      }
     }
   }
 }
