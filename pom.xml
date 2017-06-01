@@ -68,7 +68,7 @@
     <MaxPermGen>512m</MaxPermGen>
     <es.version>5.3.0</es.version>
     <metrics.version>3.2.2</metrics.version>
-
+    <disklrucache.version>2.0.2</disklrucache.version>
   </properties>
 
 
@@ -710,6 +710,17 @@
       <groupId>com.github.jbellis</groupId>
       <artifactId>jamm</artifactId>
       <version>0.3.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.jakewharton</groupId>
+      <artifactId>disklrucache</artifactId>
+      <version>${disklrucache.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>4.1.1.4</version>
     </dependency>
   </dependencies>
 

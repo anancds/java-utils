@@ -1,4 +1,4 @@
-package com.cds.utils;
+package com.cds.utils.lrucache;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
