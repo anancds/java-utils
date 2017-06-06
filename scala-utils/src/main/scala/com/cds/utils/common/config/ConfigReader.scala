@@ -1,38 +1,23 @@
-package com.cds.utils.common
+package com.cds.utils.common.config
 
 import java.util.{Map => JMap}
+
 
 import scala.collection.mutable.HashMap
 import scala.util.matching.Regex
 
 /**
-  * Created by chendongsheng5 on 2017/6/2.
+  * Created by chendongsheng5 on 2017/6/6.
+  *
+  *
   */
+
 private object ConfigReader {
 
   private val REF_RE = "\\$\\{(?:(\\w+?):)?(\\S+?)\\}".r
 
 }
 
-/**
-  * A helper class for reading config entries and performing variable substitution.
-  *
-  * If a config value contains variable references of the form "${prefix:variableName}", the
-  * reference will be replaced with the value of the variable depending on the prefix. By default,
-  * the following prefixes are handled:
-  *
-  * - no prefix: use the default config provider
-  * - system: looks for the value in the system properties
-  * - env: looks for the value in the environment
-  *
-  * Different prefixes can be bound to a `ConfigProvider`, which is used to read configuration
-  * values from the data source for the prefix, and both the system and env providers can be
-  * overridden.
-  *
-  * If the reference cannot be resolved, the original string will be retained.
-  *
-  * @param conf The config provider for the default namespace (no prefix).
-  */
 private[common] class ConfigReader(conf: ConfigProvider) {
 
   def this(conf: JMap[String, String]) = this(new MapProvider(conf))

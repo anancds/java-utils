@@ -1,7 +1,26 @@
-package com.cds.utils.common
+package com.cds.utils.common.config
 
 /**
-  * Created by chendongsheng5 on 2017/6/2.
+  * An entry contains all meta information for a configuration.
+  *
+  * When applying variable substitution to config values, only references starting with "spark." are
+  * considered in the default namespace. For known Spark configuration keys (i.e. those created using
+  * `ConfigBuilder`), references will also consider the default value when it exists.
+  *
+  * Variable expansion is also applied to the default values of config entries that have a default
+  * value declared as a string.
+  *
+  * @param key the key for the configuration
+  * @param valueConverter how to convert a string to the value. It should throw an exception if the
+  *                       string does not have the required format.
+  * @param stringConverter how to convert a value to a string that the user can use it as a valid
+  *                        string value. It's usually `toString`. But sometimes, a custom converter
+  *                        is necessary. E.g., if T is List[String], `a, b, c` is better than
+  *                        `List(a, b, c)`.
+  * @param doc the documentation for the configuration
+  * @param isPublic if this configuration is public to the user. If it's `false`, this
+  *                 configuration is only used internally and we should not expose it to users.
+  * @tparam T the value type
   */
 private[common] abstract class ConfigEntry[T] (
                                                val key: String,
