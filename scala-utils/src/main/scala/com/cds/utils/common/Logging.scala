@@ -1,6 +1,11 @@
-import org.apache.log4j.{Level, LogManager, PropertyConfigurator}
-import org.slf4j.{Logger, LoggerFactory}
-import org.slf4j.impl.StaticLoggerBinder
+/*
+ * @ProjectName: MDP
+ * @Copyright: 2017 HangZhou Hikvision System Technology Co., Ltd. All Right Reserved.
+ * @address: http://www.hikvision.com
+ * @date: 2017/6/8 11:22
+ * @Description: 本内容仅限于杭州海康威视数字技术股份有限公司内部使用，禁止转发.
+ */
+package com.cds.utils.common
 
 /**
   * Utility trait for classes that want to log data. Creates a SLF4J logger for the class and allows

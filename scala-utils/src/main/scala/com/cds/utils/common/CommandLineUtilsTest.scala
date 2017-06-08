@@ -5,7 +5,7 @@ import scala.util.Properties
 /**
   * Created by chendongsheng5 on 2017/6/1.
   */
-object Test extends CommandLineUtils{
+object CommandLineUtilsTest extends CommandLineUtils{
 
   def main(args: Array[String]): Unit = {
     printStream.println("abc")
