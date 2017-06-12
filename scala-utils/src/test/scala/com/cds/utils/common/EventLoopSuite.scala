@@ -61,6 +61,7 @@ class EventLoopSuite extends AppSpec with Timeouts {
     }
     eventLoop.start()
     eventLoop.post(1)
+    //间隔interval时间去测试，最长忍受失败的时间是timeout
     eventually(timeout(5 seconds), interval(5 millis)) {
       assert(e === receivedError)
     }
