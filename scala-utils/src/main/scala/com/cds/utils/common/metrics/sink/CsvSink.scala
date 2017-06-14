@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit
 
 import com.cds.utils.common.metrics.MetricsSystem
 import com.codahale.metrics.{CsvReporter, MetricRegistry}
-import org.apache.spark.SecurityManager
 
 /**
   * Created by chendongsheng5 on 2017/6/14.

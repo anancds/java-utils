@@ -8,7 +8,7 @@ import com.codahale.metrics.json.MetricsModule
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.eclipse.jetty.servlet.ServletContextHandler
 
-import org.apache.spark.{SecurityManager, SparkConf}
+import org.apache.spark.{SparkConf}
 
 /**
   * Created by chendongsheng5 on 2017/6/14.

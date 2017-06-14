@@ -3,7 +3,6 @@ package com.cds.utils.common.metrics.sink
 import java.util.Properties
 
 import com.codahale.metrics.{JmxReporter, MetricRegistry}
-import org.apache.spark.SecurityManager
 
 /**
   * Created by chendongsheng5 on 2017/6/14.
