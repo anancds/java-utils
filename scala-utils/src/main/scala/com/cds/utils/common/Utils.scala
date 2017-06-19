@@ -14,6 +14,17 @@ private[common] object CallSite {
   val empty = CallSite("", "")
 }
 object Utils extends Logging{
+
+  /**
+    * Define a default value for driver memory here since this value is referenced across the code
+    * base and nearly all files already use Utils.scala
+    */
+  val DEFAULT_DRIVER_MEM_MB = JavaUtils.DEFAULT_DRIVER_MEM_MB.toInt
+
+  private val MAX_DIR_CREATION_ATTEMPTS: Int = 10
+  @volatile private var localRootDirs: Array[String] = null
+
+
   /**
     * When called inside a class in the spark package, returns the name of the user code class
     * (outside the spark package) that called into Spark, as well as which Spark method they called.
