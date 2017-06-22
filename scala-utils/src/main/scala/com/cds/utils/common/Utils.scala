@@ -1,6 +1,10 @@
 package com.cds.utils.common
 
+import java.io.{File, IOException}
+import java.nio.file.{Files, Paths}
+
 import scala.collection.mutable.ArrayBuffer
+import scala.util.control.ControlThrowable
 
 /**
   * Created by chendongsheng5 on 2017/6/12.
@@ -13,7 +17,8 @@ private[common] object CallSite {
   val LONG_FORM = "callSite.long"
   val empty = CallSite("", "")
 }
-object Utils extends Logging{
+
+object Utils extends Logging {
 
   /**
     * Define a default value for driver memory here since this value is referenced across the code
@@ -99,6 +104,77 @@ object Utils extends Logging{
     val isScalaClass = className.startsWith(SCALA_CORE_CLASS_PREFIX)
     // If the class is a Spark internal class or a Scala class, then exclude.
     isSparkClass || isScalaClass
+  }
+
+  /**
+    * Execute the given block, logging and re-throwing any uncaught exception.
+    * This is particularly useful for wrapping code that runs in a thread, to ensure
+    * that exceptions are printed, and to avoid having to catch Throwable.
+    */
+  def logUncaughtExceptions[T](f: => T): T = {
+    try {
+      f
+    } catch {
+      case ct: ControlThrowable =>
+        throw ct
+      case t: Throwable =>
+        logError(s"Uncaught exception in thread ${Thread.currentThread().getName}", t)
+        throw t
+    }
+  }
+
+
+  /**
+    * Delete a file or directory and its contents recursively.
+    * Don't follow directories if they are symlinks.
+    * Throws an exception if deletion is unsuccessful.
+    */
+  def deleteRecursively(file: File) {
+    if (file != null) {
+      try {
+        if (file.isDirectory && !isSymlink(file)) {
+          var savedIOException: IOException = null
+          for (child <- listFilesSafely(file)) {
+            try {
+              deleteRecursively(child)
+            } catch {
+              // In case of multiple exceptions, only last one will be thrown
+              case ioe: IOException => savedIOException = ioe
+            }
+          }
+          if (savedIOException != null) {
+            throw savedIOException
+          }
+          ShutdownHookManager.removeShutdownDeleteDir(file)
+        }
+      } finally {
+        if (!file.delete()) {
+          // Delete can also fail if the file simply did not exist
+          if (file.exists()) {
+            throw new IOException("Failed to delete: " + file.getAbsolutePath)
+          }
+        }
+      }
+    }
+  }
+
+  /**
+    * Check to see if file is a symbolic link.
+    */
+  def isSymlink(file: File): Boolean = {
+    return Files.isSymbolicLink(Paths.get(file.toURI))
+  }
+
+  private def listFilesSafely(file: File): Seq[File] = {
+    if (file.exists()) {
+      val files = file.listFiles()
+      if (files == null) {
+        throw new IOException("Failed to list files for dir: " + file)
+      }
+      files
+    } else {
+      List()
+    }
   }
 
   def main(args: Array[String]): Unit = {
